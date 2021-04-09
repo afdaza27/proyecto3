@@ -16,12 +16,18 @@ public class Carro : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 1; i <= cantidadTexturas; i++)
+        for (int i = 1; i <= cantidadTexturas; i++)
         {
 
             texturas.Add(Resources.Load<Texture2D>("carro"+i));
         }
         gameObject.GetComponent<Renderer>().material.mainTexture = texturas[texturaActual];
+        GameObject[] esferasLucesFrontales = GameObject.FindGameObjectsWithTag("esferaLuzFrontal");
+        foreach (GameObject esferaLuzFrontal in esferasLucesFrontales)
+        {
+            esferaLuzFrontal.GetComponent<Renderer>().material.SetColor("_EMISSION", new Color(1, 1, 1));
+            esferaLuzFrontal.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        }
     }
 
     // Update is called once per frame
@@ -83,6 +89,21 @@ public class Carro : MonoBehaviour
             foreach(GameObject luzFrontal in lucesFrontales)
             {
                 luzFrontal.GetComponent<Light>().enabled = !lucesFrontalesEncendidas;
+            }
+            GameObject[] esferasLucesFrontales = GameObject.FindGameObjectsWithTag("esferaLuzFrontal");
+            foreach (GameObject esferaLuzFrontal in esferasLucesFrontales)
+            {
+                esferaLuzFrontal.GetComponent<Renderer>().material.SetColor("_EMISSION", new Color(1,1,1));
+                if (!lucesFrontalesEncendidas)
+                {
+                    esferaLuzFrontal.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+                }
+                else
+                {
+                    esferaLuzFrontal.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+                }
+
+                
             }
             lucesFrontalesEncendidas = !lucesFrontalesEncendidas;
         }
